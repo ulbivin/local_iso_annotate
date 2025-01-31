@@ -34,15 +34,18 @@ python iso-count_in_exon-range.py -f [annotated_counts.txt] -s [start exon] -e [
  
 The output is like this example looking at exon 4 to 10 in a BRCA2 sequencing:
 python /mnt/DATA1/FLAIR_kConFab/iso-count_in_exon-range.py -f 61_071110075_BRCA2_ex1F-ex11R_seq040_counts_matrix.tsv.counts.tsv.anno_counts.tsv -s 4 -e 10
-Local-Iso1      4380    4, 5, 6, 7, 8, 9, 10
-Local-Iso2      913     4, 5, 8, 9, 10
-Local-Iso3      503     4, 5, 6, 8, 9, 10
-Local-Iso4      465     4, 5, 7, 8, 9, 10
-Local-Iso5      356     4, 6, 7, 8, 9, 10
-Local-Iso6      285     4, 8, 9, 10
-Local-Iso7      278     4, 5, 6, 7, 32329443-32331030, 10
-Local-Iso8      207     4, 7, 8, 9, 10
-Local-Iso9      150     4, 5, 32329443-32331030, 10
+| Isoform     | Count | Affected Exons |
+|------------|-------|---------------|
+| Local-Iso1 | 4380  | 4, 5, 6, 7, 8, 9, 10 |
+| Local-Iso2 | 913   | 4, 5, 8, 9, 10 |
+| Local-Iso3 | 503   | 4, 5, 6, 8, 9, 10 |
+| Local-Iso4 | 465   | 4, 5, 7, 8, 9, 10 |
+| Local-Iso5 | 356   | 4, 6, 7, 8, 9, 10 |
+| Local-Iso6 | 285   | 4, 8, 9, 10 |
+| Local-Iso7 | 278   | 4, 5, 6, 7, 32329443-32331030, 10 |
+| Local-Iso8 | 207   | 4, 7, 8, 9, 10 |
+| Local-Iso9 | 150   | 4, 5, 32329443-32331030, 10 |
+
  
 The one/two digit numbers are identified exons, and the longer numbers denote genomic positions of observed exons not in the annotation file (chromosome number is omitted). 32329443-32331030 in the example corresponds to exon 8-start and exon 9-end meaning intron retention.
  
@@ -52,16 +55,21 @@ iso-count_in_exon-range.py will treat the added alternative exons like 13_dE13p3
  
 E.g. python /mnt/DATA1/FLAIR_kConFab/iso-count_in_exon-range.py -f 57_071110075_BRCA1_5UTR-3UTR_seq050_counts_matrix.tsv.counts.tsv.anno_counts.tsv -s 11 -e 16
 Will print:
-Local-Iso1      3739    11, 12, 13, 14, 15, 16
-Local-Iso2      276     11, 12, 43079334-43079399, 13, 14, 15, 16
-Local-Iso3      31      11, 13, 14, 15, 16
-Local-Iso4      13      11, 12, 13, 15, 16
+| Isoform     | Count | Affected Exons |
+|------------|-------|-------------------------------|
+| Local-Iso1 | 3739  | 11, 12, 13, 14, 15, 16 |
+| Local-Iso2 | 276   | 11, 12, 43079334-43079399, 13, 14, 15, 16 |
+| Local-Iso3 | 31    | 11, 13, 14, 15, 16 |
+| Local-Iso4 | 13    | 11, 12, 13, 15, 16 |
+
 While python /mnt/DATA1/FLAIR_kConFab/iso-count_in_exon-range.py -f 57_071110075_BRCA1_5UTR-3UTR_seq050_counts_matrix.tsv.counts.tsv.anno_counts.tsv -s 11 -e 16 -S
 The script differentiates between 13 and 13_Ex13p3:
-Local-Iso1      2833    11, 12, 13, 14, 15, 16
-Local-Iso2      906     11, 12, 13_Ex13p3, 14, 15, 16
-Local-Iso3      203     11, 12, 43079334-43079399, 13, 14, 15, 16
-Local-Iso4      73      11, 12, 43079334-43079399, 13_Ex13p3, 14, 15, 16
-Local-Iso5      31      11, 13_Ex13p3, 14, 15, 16
-Local-Iso6      13      11, 12, 13_Ex13p3, 15, 16
+| Isoform     | Count | Affected Exons |
+|------------|-------|-------------------------------------|
+| Local-Iso1 | 2833  | 11, 12, 13, 14, 15, 16 |
+| Local-Iso2 | 906   | 11, 12, 13_Ex13p3, 14, 15, 16 |
+| Local-Iso3 | 203   | 11, 12, 43079334-43079399, 13, 14, 15, 16 |
+| Local-Iso4 | 73    | 11, 12, 43079334-43079399, 13_Ex13p3, 14, 15, 16 |
+| Local-Iso5 | 31    | 11, 13_Ex13p3, 14, 15, 16 |
+| Local-Iso6 | 13    | 11, 12, 13_Ex13p3, 15, 16 |
 
