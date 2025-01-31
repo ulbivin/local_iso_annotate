@@ -1,6 +1,21 @@
 # local_iso_annotate
-UPDATE 20250131 - Updated with Readme and new exon info for BRCA1 annotation file. Please find the ranges to explore in the spredsheets.
+************************************** UPDATE 20250131 **************************************
+
+Updated with Readme and new exon info for BRCA1 annotation file.
 Please note that iso-count_in_exon-range.py should no longer be used - use script by José Marcos instead.
+
+Please also note updated ranges (systematic numbering):
+Mut1	BRCA1 c.135-1G>T: Exon 2 to Exon 6	2	6
+Mut2	BRCA2 c.8632+1G>A: Exon 18 to Exon 21	18	21
+Mut3	BRCA1 c.594-2A>C: Exon 8 to Exon 12	7	13
+Mut4	BRCA2 c.426-12_8delGTTTT: Exon 2 to Exon 8	2	8
+Mut5	BRCA2 c.9501+3A>T: Exon 24 to Exon 27	22	26
+Mut6	BRCA2 c.7988A>T: Exon 16 to Exon 19	16	19
+Mut8	BRCA1 c.671-2A>G: Exon 8 to Exon 12	7	13
+Mut9	BRCA1 c.5467+5G>C: Exon 22 to Exon 24	19	23
+
+*************************************** End of update ***************************************
+
 
 bed12_annotate.py takes in an exon annotation file and the [sample]_all_corrected.bed file from the FLAIR-output, and translate the bed-file entries to exon numbers if they match:
 python bed12_annotate.py [exon_info.tsv] [input.bed12] > [annotated_output.txt] 
