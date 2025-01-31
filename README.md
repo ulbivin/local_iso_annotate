@@ -6,17 +6,16 @@ Please note that iso-count_in_exon-range.py should no longer be used - use scrip
 
 Please also note updated ranges (systematic numbering):
 
-| Mutation | Variant | Exons reange | Start Exon | End Exon |
-|----------|---------|---------------|------------|----------|
-| Mut1     | BRCA1 c.135-1G>T  | Exon 2 to Exon 6  | 2  | 6  |
-| Mut2     | BRCA2 c.8632+1G>A | Exon 18 to Exon 21 | 18 | 21 |
-| Mut3     | BRCA1 c.594-2A>C  | Exon 8 to Exon 12  | 7  | 13 |
-| Mut4     | BRCA2 c.426-12_8delGTTTT | Exon 2 to Exon 8  | 2  | 8  |
-| Mut5     | BRCA2 c.9501+3A>T | Exon 24 to Exon 27 | 22 | 26 |
-| Mut6     | BRCA2 c.7988A>T   | Exon 16 to Exon 19 | 16 | 19 |
-| Mut8     | BRCA1 c.671-2A>G  | Exon 8 to Exon 12  | 7  | 13 |
-| Mut9     | BRCA1 c.5467+5G>C | Exon 22 to Exon 24 | 19 | 23 |
-
+| Sample  | Variant                     | Start | End |
+|---------|------------------------------|-------|-----|
+| Mut1    | BRCA1 c.135-1G>T             | 2     | 6   |
+| Mut2    | BRCA2 c.8632+1G>A            | 18    | 21  |
+| Mut3    | BRCA1 c.594-2A>C             | 7     | 13  |
+| Mut4    | BRCA2 c.426-12_8delGTTTT     | 2     | 8   |
+| Mut5    | BRCA2 c.9501+3A>T            | 22    | 26  |
+| Mut6    | BRCA2 c.7988A>T              | 16    | 19  |
+| Mut8    | BRCA1 c.671-2A>G             | 7     | 13  |
+| Mut9    | BRCA1 c.5467+5G>C            | 19    | 23  |
 
 *************************************** End of update ***************************************
 
