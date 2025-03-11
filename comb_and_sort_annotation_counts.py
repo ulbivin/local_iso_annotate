@@ -7,7 +7,7 @@ def parse_annotated_output(file):
     with open(file, 'r') as f:
         for line in f:
             parts = line.strip().split('\t')
-            entry_name = parts[0].split('_')[0]
+            entry_name = parts[0].rsplit('_' ,1)[0]
             exons = parts[1].strip().split(', ')
             annotations[entry_name] = exons
     return annotations
@@ -15,7 +15,7 @@ def parse_annotated_output(file):
 # Function to parse the counts TSV file
 def parse_counts_tsv(file):
     counts = pd.read_csv(file, sep='\t', skiprows=1, header=None, names=["entry", "count"])
-    counts["entry"] = counts["entry"].apply(lambda x: x.split('_')[0])
+    counts["entry"] = counts["entry"].apply(lambda x: x.rsplit('_', 1)[0])
     counts_dict = dict(zip(counts["entry"], counts["count"].astype(int)))
     return counts_dict
 
