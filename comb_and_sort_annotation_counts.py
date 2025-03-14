@@ -159,7 +159,7 @@ def main():
     """
     # Ensure the correct number of arguments are provided
     if len(sys.argv) != 5:
-        print("Usage: python comb_and_sort_annotation_counts.py <counts.tsv> <bed12_annotation.tsv> <exon_info.tsv> <input.gtf>")
+        print("Usage: python comb_and_sort_annotation_counts.py <counts.tsv> <bed12_annotated.tsv> <exon_info.tsv> <input.gtf>")
         sys.exit(1)
     
     counts_file = sys.argv[1]  # Path to counts file
