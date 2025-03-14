@@ -159,7 +159,7 @@ def main():
     """
     # Ensure the correct number of arguments are provided
     if len(sys.argv) != 5:
-        print("Usage: python annotate_counts.py <counts.tsv> <bed12_annotation.tsv> <exon_info.tsv> <input.gtf>")
+        print("Usage: python comb_and_sort_annotation_counts.py <counts.tsv> <bed12_annotation.tsv> <exon_info.tsv> <input.gtf>")
         sys.exit(1)
     
     counts_file = sys.argv[1]  # Path to counts file
@@ -169,7 +169,7 @@ def main():
     
     # Parse input files
     counts = parse_counts(counts_file)
-    bed12_annot = parse_bed12_annotation(bed12_annotation_file)
+    bed12_annot = parse_bed12_annotation(bed12_annotation_file)    
     exon_info = parse_exon_info(exon_info_file)
     gtf_info = parse_gtf(gtf_file)
     
