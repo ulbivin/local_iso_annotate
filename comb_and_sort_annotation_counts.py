@@ -114,7 +114,7 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
     annotated_entries = []
     
     for _, row in counts.iterrows():
-        entry_id = row['ids'].strip()  # Clean up entry ID
+        entry_id = row.iloc[0].strip()  # Clean up entry ID
         count = int(row.iloc[1])  # Extract counts
         counts_entry = entry_id.rsplit("_", 1)[0].strip().replace('_', '-')  # Format entry name
         
