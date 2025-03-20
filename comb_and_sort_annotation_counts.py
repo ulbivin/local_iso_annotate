@@ -121,7 +121,8 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
         # If the ID contains "ENST", it's a transcript
         if "ENST" in entry_id:
             transcript_id = entry_id.split("_")[0]
-            
+            if "-" in transcript_id:
+                transcript_id = transcript_id.split("-")[0]
             # Find matching exons in GTF file
             matching_exons = gtf_info[gtf_info["attributes"].str.contains(f'transcript_id "{transcript_id}"', regex=False)]
             
@@ -134,14 +135,18 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
                 exon_list = map_exon_numbers(exon_coordinates, exon_info, chromosome)
             else:
                 exon_list = "N/A"  # If no match is found, mark as "N/A"
+                sys.stderr.write(transcript_id+" not found in gtf file\n")
         
         else:
             # Find a match in BED12 annotation
+            if len(counts_entry.rsplit("-", 1)[-1])==1:
+                counts_entry=counts_entry.rsplit("-", 1)[0]
             match = bed12_annot[bed12_annot["id"].str.strip() == counts_entry]
             if not match.empty:
                 exon_list = match["exons"].values[0]  # Get exon list from BED12 annotation
             else:
                 exon_list = "N/A"  # If no match is found, mark as "N/A"
+                sys.stderr.write(counts_entry+" not found in annotated bed12 tsv file\n")
         
         # Store annotated entry
         annotated_entries.append((counts_entry, count, exon_list))
@@ -176,9 +181,10 @@ def main():
     # Annotate counts
     annotated_data = annotate_counts(counts, bed12_annot, exon_info, gtf_info)
     
+    with open(sys.argv[1]+'.anno_counts.tsv', 'w') as fout:
     # Print the annotated data
-    for annotation in annotated_data:
-        print(annotation)
+        for annotation in annotated_data:
+            print(annotation, file=fout)
 
 # Run main function if script is executed directly
 if __name__ == "__main__":
