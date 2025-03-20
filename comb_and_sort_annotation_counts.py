@@ -1,5 +1,6 @@
 import pandas as pd
 import sys
+import argparse
 
 # Function to parse the counts file
 def parse_counts(counts_file):
@@ -28,13 +29,13 @@ def parse_gtf(gtf_file):
     """
     gtf = pd.read_csv(gtf_file, sep="\t", comment="#", header=None)
     gtf.columns = ["chromosome", "source", "feature", "start", "end", "score", "strand", "frame", "attributes"]
-    
+
     # Filter only exon entries
     gtf = gtf[gtf["feature"] == "exon"]
-    
+
     # Remove 'chr' prefix from chromosome names
     gtf["chromosome"] = gtf["chromosome"].astype(str).str.replace("chr", "")
-    
+
     return gtf
 
 # Function to parse the exon information file
@@ -49,10 +50,10 @@ def parse_exon_info(exon_info_file):
         DataFrame: Parsed exon information.
     """
     exon_info = pd.read_csv(exon_info_file, sep="\t")
-    
+
     # Remove 'chr' prefix from chromosome names
     exon_info["chromosome"] = exon_info["chromosome"].astype(str).str.replace("chr", "")
-    
+
     return exon_info
 
 # Function to parse the BED12 annotation file
@@ -84,17 +85,17 @@ def map_exon_numbers(exon_coordinates, exon_info, chromosome):
         str: Comma-separated list of exon numbers or genomic coordinates.
     """
     mapped_exons = []
-    
+
     for start, end in exon_coordinates:
         # Find an exact match in exon_info
         match = exon_info[(exon_info["start"] == start) & (exon_info["end"] == end)]
-        
+
         if not match.empty:
             exon_number = match["exon#"].values[0]
             mapped_exons.append(str(exon_number))  # Append the exon number if a match is found
         else:
             mapped_exons.append(f"{chromosome}:{start}-{end}")  # Keep genomic coordinates if no match
-    
+
     return ", ".join(mapped_exons)
 
 # Function to annotate the counts file
@@ -112,12 +113,12 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
         List[str]: Sorted annotated entries in formatted string representation.
     """
     annotated_entries = []
-    
+
     for _, row in counts.iterrows():
         entry_id = row.iloc[0].strip()  # Clean up entry ID
         count = int(row.iloc[1])  # Extract counts
         counts_entry = entry_id.rsplit("_", 1)[0].strip().replace('_', '-')  # Format entry name
-        
+
         # If the ID contains "ENST", it's a transcript
         if "ENST" in entry_id:
             transcript_id = entry_id.split("_")[0]
@@ -125,18 +126,18 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
                 transcript_id = transcript_id.split("-")[0]
             # Find matching exons in GTF file
             matching_exons = gtf_info[gtf_info["attributes"].str.contains(f'transcript_id "{transcript_id}"', regex=False)]
-            
+
             if not matching_exons.empty:
                 # Extract exon start and end coordinates
                 exon_coordinates = [(row["start"], row["end"]) for _, row in matching_exons.iterrows()]
                 chromosome = matching_exons["chromosome"].values[0]  # Extract chromosome number
-                
+
                 # Map genomic coordinates to exon numbers
                 exon_list = map_exon_numbers(exon_coordinates, exon_info, chromosome)
             else:
                 exon_list = "N/A"  # If no match is found, mark as "N/A"
                 sys.stderr.write(transcript_id+" not found in gtf file\n")
-        
+
         else:
             # Find a match in BED12 annotation
             if len(counts_entry.rsplit("-", 1)[-1])==1:
@@ -147,10 +148,10 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
             else:
                 exon_list = "N/A"  # If no match is found, mark as "N/A"
                 sys.stderr.write(counts_entry+" not found in annotated bed12 tsv file\n")
-        
+
         # Store annotated entry
         annotated_entries.append((counts_entry, count, exon_list))
-    
+
     # Sort entries by counts (descending order)
     annotated_entries.sort(key=lambda x: x[1], reverse=True)
 
@@ -162,27 +163,32 @@ def main():
     """
     Main function to parse input files, annotate counts, and print the results.
     """
-    # Ensure the correct number of arguments are provided
-    if len(sys.argv) != 5:
-        print("Usage: python comb_and_sort_annotation_counts.py <counts.tsv> <bed12_annotated.tsv> <exon_info.tsv> <input.gtf>")
-        sys.exit(1)
-    
-    counts_file = sys.argv[1]  # Path to counts file
-    bed12_annotation_file = sys.argv[2]  # Path to BED12 annotation file
-    exon_info_file = sys.argv[3]  # Path to exon information file
-    gtf_file = sys.argv[4]  # Path to GTF file
-    
+    parser = argparse.ArgumentParser(description="Annotate counts file with exon or transcript information.")
+    parser.add_argument("counts_file", help="Path to counts file")
+    parser.add_argument("bed12_annotation_file", help="Path to annotaion output file from bed12_annotate.py")
+    parser.add_argument("exon_info_file", help="Path to exon information file")
+    parser.add_argument("gtf_file", help="Path to GTF file")
+    parser.add_argument("-o", "--output", help="Optional output file path")
+
+    args = parser.parse_args()
+
+    counts_file = args.counts_file
+    bed12_annotation_file = args.bed12_annotation_file
+    exon_info_file = args.exon_info_file
+    gtf_file = args.gtf_file
+    output_file = args.output if args.output else counts_file + '.anno_counts.tsv'
+
     # Parse input files
     counts = parse_counts(counts_file)
-    bed12_annot = parse_bed12_annotation(bed12_annotation_file)    
+    bed12_annot = parse_bed12_annotation(bed12_annotation_file)
     exon_info = parse_exon_info(exon_info_file)
     gtf_info = parse_gtf(gtf_file)
-    
+
     # Annotate counts
     annotated_data = annotate_counts(counts, bed12_annot, exon_info, gtf_info)
-    
-    with open(sys.argv[1]+'.anno_counts.tsv', 'w') as fout:
-    # Print the annotated data
+
+    with open(output_file, 'w') as fout:
+        # Print the annotated data
         for annotation in annotated_data:
             print(annotation, file=fout)
 
