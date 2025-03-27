@@ -142,6 +142,8 @@ def annotate_counts(counts, bed12_annot, exon_info, gtf_info):
             # Find a match in BED12 annotation
             if len(counts_entry.rsplit("-", 1)[-1])==1:
                 counts_entry=counts_entry.rsplit("-", 1)[0]
+            if "-1-" in counts_entry:
+                counts_entry=counts_entry.replace("-1-", "-")
             match = bed12_annot[bed12_annot["id"].str.strip() == counts_entry]
             if not match.empty:
                 exon_list = match["exons"].values[0]  # Get exon list from BED12 annotation
