@@ -1,4 +1,33 @@
 # local_iso_annotate
+************************************** UPDATE 20250401 **************************************
+
+Corrected error that left isoforms named based on Ensembl numbers from FLAIR undetected and made several updates:
+
+bed12_annotate.py
+•	Replaces all “_” with “-“ in the entry names. This is to accomodate PacBio read names.
+•	Includes the chromosome number in genome coordinates like: 17:43124017-43124102. This is to accomodate transcripts on other chromosomes with identical boundaries that might disturb the analysis.
+
+comb_and_sort_annotation_counts.py
+•	Requires to also take in the exon annotation file used for bed12_annotate.py and the gtf file used for FLAIR. This is to annotate the isoforms with ENST numbers in accordance with our local exon annotation file.
+•	Like bed12_annotate.py it replaces all “_” with “-“ in the entry names and includes the chromosome number in genome coordinates
+•	Handles FLAIR annotation where "-N" (N=int) is added to the isoform name.
+Note that the usage is updated as the script requires to additional files to run:
+
+Example (all_corrected.bed.anno.tsv is the output from bed12_annotate.py):
+
+`python comb_and_sort_annotation_counts.py counts.tsv all_corrected.bed.anno.tsv BRCA1_exon_info.txt gencode.v46.basic.annotation.gtf`
+
+
+Optionally add "-o" to specify the output path.
+
+Make sure to also use Josés updated script for the final counting: 
+https://github.com/jpuntomarcos/report-findings/tree/main
+
+
+
+
+*************************************** End of update ***************************************
+
 ************************************** UPDATE 20250131 **************************************
 
 Updated with Readme and new exon info for BRCA1 annotation file.
